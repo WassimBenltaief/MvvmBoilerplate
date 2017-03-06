@@ -43,24 +43,20 @@ public class DatabaseHelper {
     }
 
     @SuppressWarnings("deprecation")
-    Observable<Movie> setMovies(List<Movie> movies) {
-        return Observable.create(subscriber -> {
-            if (subscriber.isUnsubscribed()) return;
-            BriteDatabase.Transaction transaction = mDb.newTransaction();
-            try {
-                for (Movie movie : movies) {
-                    long result = mDb.insert(
-                            MovieModel.TABLE_NAME,
-                            Movie.FACTORY.marshal(movie).asContentValues(),
-                            SQLiteDatabase.CONFLICT_REPLACE);
-                    if (result >= 0) subscriber.onNext(movie);
-                }
-                transaction.markSuccessful();
-                subscriber.onCompleted();
-            } finally {
-                transaction.end();
+    Observable<List<Movie>> setMovies(List<Movie> movies) {
+        BriteDatabase.Transaction transaction = mDb.newTransaction();
+        try {
+            for (Movie movie : movies) {
+                long result = mDb.insert(
+                        MovieModel.TABLE_NAME,
+                        Movie.FACTORY.marshal(movie).asContentValues(),
+                        SQLiteDatabase.CONFLICT_REPLACE);
             }
-        });
+            transaction.markSuccessful();
+        } finally {
+            transaction.end();
+        }
+        return Observable.just(movies);
     }
 
     Observable<List<Movie>> getMovies() {

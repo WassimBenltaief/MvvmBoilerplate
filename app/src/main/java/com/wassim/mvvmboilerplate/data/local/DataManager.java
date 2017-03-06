@@ -36,11 +36,10 @@ public class DataManager {
     public Observable<List<Movie>> getMovies() {
         return Observable.just(networkUtil.isNetworkConnected(context))
                 .filter(connected -> connected)
-                .flatMap(connected -> apiService.getMovies())
+                .concatMap(connected -> apiService.getMovies())
                 .timeout(5, TimeUnit.SECONDS)
-                .flatMap(databaseHelper::setMovies)
-                .toSortedList()
-                .onErrorResumeNext(databaseHelper.getMovies())
+                .concatMap(databaseHelper::setMovies)
+                .onErrorResumeNext(throwable -> databaseHelper.getMovies())
                 .defaultIfEmpty(Collections.emptyList());
     }
 }
