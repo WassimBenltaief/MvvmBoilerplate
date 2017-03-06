@@ -7,7 +7,9 @@ import com.wassim.mvvmboilerplate.data.remote.ApiService;
 import com.wassim.mvvmboilerplate.injection.ApplicationContext;
 import com.wassim.mvvmboilerplate.util.NetworkUtil;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,6 +34,13 @@ public class DataManager {
     }
 
     public Observable<List<Movie>> getMovies() {
-        return apiService.getMovies();
+        return Observable.just(networkUtil.isNetworkConnected(context))
+                .filter(connected -> connected)
+                .flatMap(connected -> apiService.getMovies())
+                .timeout(5, TimeUnit.SECONDS)
+                .flatMap(databaseHelper::setMovies)
+                .toSortedList()
+                .onErrorResumeNext(databaseHelper.getMovies())
+                .defaultIfEmpty(Collections.emptyList());
     }
 }

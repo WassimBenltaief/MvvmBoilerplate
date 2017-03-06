@@ -28,3 +28,7 @@ select_by_release_year:
 SELECT *
 FROM movie
 WHERE releaseYear = ?;
+
+insert_movie:
+INSERT INTO movie (id, title, image, rating, releaseYear, genre, synopsis, checked)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
