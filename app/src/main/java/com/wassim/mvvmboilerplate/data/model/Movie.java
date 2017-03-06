@@ -24,6 +24,27 @@ public abstract class Movie extends MvvmModel implements MovieModel, Parcelable 
     public static final RowMapper<Movie> YEAR_MAPPER = FACTORY.select_by_release_yearMapper();
 
     public static TypeAdapter<Movie> typeAdapter(Gson gson) {
-        return new AutoValue_Movie.GsonTypeAdapter(gson);
+        return new AutoValue_Movie.GsonTypeAdapter(gson)
+                .setDefaultChecked(0L);
+    }
+
+    public static Builder builder() {
+        return new AutoValue_Movie.Builder();
+    }
+
+    public abstract Builder toBuilder();
+
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder setId(long id);
+        public abstract Builder setTitle(String title);
+        public abstract Builder setImage(String image);
+        public abstract Builder setRating(double rating);
+        public abstract Builder setReleaseYear(long year);
+        public abstract Builder setGenre(String genre);
+        public abstract Builder setSynopsis(String synopsis);
+        public abstract Builder setChecked(Long checked);
+
+        public abstract Movie build();
     }
 }
