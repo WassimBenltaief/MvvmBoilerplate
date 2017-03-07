@@ -18,12 +18,12 @@ import org.junit.runners.model.Statement;
  * It also exposes some of the dependencies so they can be easily accessed from the tests, e.g. to
  * stub mocks etc.
  */
-public class TestComponentRule implements TestRule {
+public class IntegrationTestComponentRule implements TestRule {
 
     private final ApplicationComponent mApplicationComponent;
     private final Context mContext;
 
-    public TestComponentRule(Context context) {
+    public IntegrationTestComponentRule(Context context) {
         mContext = context;
         App application = App.get(context);
         mApplicationComponent = DaggerApplicationComponent.builder()
