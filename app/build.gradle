@@ -40,6 +40,10 @@ android {
             }
         }
     }
+    // needed because of this https://github.com/square/okio/issues/58
+    lintOptions {
+        disable 'InvalidPackage'
+    }
 }
 
 jacocoAndroidUnitTestReport {
