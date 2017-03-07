@@ -49,8 +49,12 @@ android {
 jacocoAndroidUnitTestReport {
     excludes += ['**/util/*.*',
                  '**/ui/base/*.*',
-                 '**/injection/*.*',
-                 '**/*_Factory.*',
+                 '**/data/remote/*.*',
+                 '**/injection/**/*.*',
+                 '**/*Factory*',
+                 '**/*Insert_movie*',
+                 '**/*Canary*',
+                 '**/*getComponent*',
                  '**/*AutoValue_*.*',
                  '**/$AutoValue_*.*',
                  '**/*Builder*.*']

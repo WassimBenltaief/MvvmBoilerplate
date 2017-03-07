@@ -57,7 +57,7 @@ public class DatabaseHelperTest {
     }
 
     @Test
-    public void getRibots() {
+    public void getMovies() {
         Movie movie1 = TestDataFactory.makeMovie(1);
         Movie movie2 = TestDataFactory.makeMovie(2);
         List<Movie> movies = Arrays.asList(movie1, movie2);
