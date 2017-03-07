@@ -40,21 +40,21 @@ public class DataManagerTest {
     @Mock
     Context mMockContext;
     @Mock
-    NetworkUtil mNetworkUtil;
+    NetworkUtil mMockNetworkUtil;
 
     private DataManager mDataManager;
 
     @Before
     public void setUp() {
         mDataManager = new DataManager(mMockApiService, mMockDatabaseHelper,
-                mMockContext, mNetworkUtil);
+                mMockContext, mMockNetworkUtil);
     }
 
     @Test
     public void getMoviesCallsRetrofitAndEmitsValues() {
         List<Movie> movies = TestDataFactory.makeListMovie(2);
 
-        when(mNetworkUtil.isNetworkConnected(any())).thenReturn(true);
+        when(mMockNetworkUtil.isNetworkConnected(any())).thenReturn(true);
         when(mMockApiService.getMovies()).thenReturn(Observable.just(movies));
         when(mMockDatabaseHelper.setMovies(any())).thenReturn(Observable.just(movies));
 
@@ -72,7 +72,7 @@ public class DataManagerTest {
     @Test
     public void getMoviesNoInternet() {
 
-        when(mNetworkUtil.isNetworkConnected(any()))
+        when(mMockNetworkUtil.isNetworkConnected(any()))
                 .thenReturn(false);
 
         TestSubscriber<List<Movie>> result = new TestSubscriber<>();
@@ -89,23 +89,23 @@ public class DataManagerTest {
 
     @Test
     public void getMoviesCallsRetrofitAndSaveInDatabase() {
-        List<Movie> customers = TestDataFactory.makeListMovie(2);
+        List<Movie> movies = TestDataFactory.makeListMovie(2);
 
-        when(mNetworkUtil.isNetworkConnected(any())).thenReturn(true);
-        when(mMockApiService.getMovies()).thenReturn(Observable.just(customers));
-        when(mMockDatabaseHelper.setMovies(customers)).thenReturn(Observable.just(customers));
+        when(mMockNetworkUtil.isNetworkConnected(any())).thenReturn(true);
+        when(mMockApiService.getMovies()).thenReturn(Observable.just(movies));
+        when(mMockDatabaseHelper.setMovies(movies)).thenReturn(Observable.just(movies));
 
         mDataManager.getMovies().subscribe();
 
         verify(mMockApiService).getMovies();
-        verify(mMockDatabaseHelper).setMovies(customers);
+        verify(mMockDatabaseHelper).setMovies(movies);
         verify(mMockDatabaseHelper, never()).getMovies();
     }
 
     @Test
     public void getMoviesSwitchIfEmpty() {
 
-        when(mNetworkUtil.isNetworkConnected(any()))
+        when(mMockNetworkUtil.isNetworkConnected(any()))
                 .thenReturn(true);
 
         when(mMockApiService.getMovies())
@@ -130,16 +130,16 @@ public class DataManagerTest {
 
     @Test
     public void onErrorResumeNextCallsDatabase() {
-        List<Movie> customers = TestDataFactory.makeListMovie(2);
+        List<Movie> movies = TestDataFactory.makeListMovie(2);
 
-        when(mNetworkUtil.isNetworkConnected(any()))
+        when(mMockNetworkUtil.isNetworkConnected(any()))
                 .thenReturn(true);
 
         when(mMockApiService.getMovies())
                 .thenReturn(Observable.error(new UnknownHostException()));
 
         when(mMockDatabaseHelper.getMovies())
-                .thenReturn(Observable.just(customers));
+                .thenReturn(Observable.just(movies));
 
         mDataManager.getMovies().subscribe();
 
