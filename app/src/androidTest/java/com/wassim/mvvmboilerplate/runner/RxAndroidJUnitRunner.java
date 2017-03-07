@@ -2,9 +2,7 @@ package com.wassim.mvvmboilerplate.runner;
 
 import android.os.Bundle;
 import android.support.test.espresso.Espresso;
-
-import com.quandoo.test.util.RxIdlingResource;
-
+import com.wassim.mvvmboilerplate.util.RxIdlingResource;
 
 /**
  * Runner that registers a Espresso Indling resource that handles waiting for
