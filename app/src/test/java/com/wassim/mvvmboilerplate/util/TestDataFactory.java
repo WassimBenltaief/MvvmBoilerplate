@@ -29,7 +29,7 @@ public class TestDataFactory {
         return movies;
     }
 
-    private static Movie makeMovie(int index) {
+    public static Movie makeMovie(int index) {
         return Movie.builder()
                 .setId(index)
                 .setTitle("title" + index)

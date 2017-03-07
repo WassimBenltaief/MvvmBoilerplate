@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.squareup.sqldelight'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'jacoco-android'
 
 android {
     compileSdkVersion 24
@@ -20,11 +21,39 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+            testCoverageEnabled true
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    // needed because of https://github.com/robolectric/robolectric/issues/2230
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
+    // needed because of this https://github.com/square/okio/issues/58
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+jacocoAndroidUnitTestReport {
+    excludes += ['**/util/*.*',
+                 '**/ui/base/*.*',
+                 '**/injection/*.*',
+                 '**/*_Factory.*',
+                 '**/*AutoValue_*.*',
+                 '**/$AutoValue_*.*',
+                 '**/*Builder*.*']
 }
 
 dependencies {
@@ -135,6 +164,6 @@ dependencies {
 }
 
 // Log out test results to console
-tasks.matching {it instanceof Test}.all {
+tasks.matching { it instanceof Test }.all {
     testLogging.events = ["failed", "passed", "skipped"]
 }

@@ -26,7 +26,9 @@ public class App extends Application {
         super.onCreate();
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-            Stetho.initializeWithDefaults(this);
+            if (!checkTestModeRobolectric()) {
+                Stetho.initializeWithDefaults(this);
+            }
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectAll()
                     .penaltyLog()
@@ -45,13 +47,17 @@ public class App extends Application {
      * if we're not in Test mode check then LeakCanary.isInAnalyzerProcess
      */
     private void checkLeakCanaryHeapProcess() {
-        if (!App.get(this).getApplicationInfo().dataDir.contains("robolectric")) {
+        if (!checkTestModeRobolectric()) {
             if (LeakCanary.isInAnalyzerProcess(this)) {
                 // This process is dedicated to LeakCanary for heap analysis.
                 return;
             }
             mRefWatcher = LeakCanary.install(this);
         }
+    }
+
+    public boolean checkTestModeRobolectric() {
+        return App.get(this).getApplicationInfo().dataDir.contains("robolectric");
     }
 
     public static App get(Context context) {
