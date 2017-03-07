@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,7 +22,9 @@ import rx.observers.TestSubscriber;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 /**
@@ -82,6 +85,68 @@ public class DataManagerTest {
 
         verify(mMockApiService, never()).getMovies();
         verify(mMockDatabaseHelper, never()).getMovies();
+    }
+
+    @Test
+    public void getMoviesCallsRetrofitAndSaveInDatabase() {
+        List<Movie> customers = TestDataFactory.makeListMovie(2);
+
+        when(mNetworkUtil.isNetworkConnected(any())).thenReturn(true);
+        when(mMockApiService.getMovies()).thenReturn(Observable.just(customers));
+        when(mMockDatabaseHelper.setMovies(customers)).thenReturn(Observable.just(customers));
+
+        mDataManager.getMovies().subscribe();
+
+        verify(mMockApiService).getMovies();
+        verify(mMockDatabaseHelper).setMovies(customers);
+        verify(mMockDatabaseHelper, never()).getMovies();
+    }
+
+    @Test
+    public void getMoviesSwitchIfEmpty() {
+
+        when(mNetworkUtil.isNetworkConnected(any()))
+                .thenReturn(true);
+
+        when(mMockApiService.getMovies())
+                .thenReturn(Observable.just(Collections.emptyList()));
+
+        when(mMockDatabaseHelper.setMovies(any()))
+                .thenReturn(Observable.just(Collections.emptyList()));
+
+        TestSubscriber<List<Movie>> result = new TestSubscriber<>();
+        mDataManager.getMovies().subscribe(result);
+
+        result.assertNoErrors();
+        result.assertValue(Collections.emptyList());
+        result.assertCompleted();
+        result.assertUnsubscribed();
+
+        verify(mMockApiService, times(1)).getMovies();
+        verify(mMockDatabaseHelper, times(1)).setMovies(any());
+        verify(mMockDatabaseHelper, never()).getMovies();
+        verifyNoMoreInteractions(mMockApiService, mMockDatabaseHelper);
+    }
+
+    @Test
+    public void onErrorResumeNextCallsDatabase() {
+        List<Movie> customers = TestDataFactory.makeListMovie(2);
+
+        when(mNetworkUtil.isNetworkConnected(any()))
+                .thenReturn(true);
+
+        when(mMockApiService.getMovies())
+                .thenReturn(Observable.error(new UnknownHostException()));
+
+        when(mMockDatabaseHelper.getMovies())
+                .thenReturn(Observable.just(customers));
+
+        mDataManager.getMovies().subscribe();
+
+        verify(mMockApiService, times(1)).getMovies();
+        verify(mMockDatabaseHelper, never()).setMovies(any());
+        verify(mMockDatabaseHelper, times(1)).getMovies();
+
     }
 
 }
