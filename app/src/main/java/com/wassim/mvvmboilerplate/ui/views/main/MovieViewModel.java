@@ -15,7 +15,7 @@ import rx.Observable;
  */
 
 @ViewModel
-class MovieViewModel extends BaseViewModel<Movie> {
+public class MovieViewModel extends BaseViewModel<Movie> {
 
     private DataManager dataManager;
 
