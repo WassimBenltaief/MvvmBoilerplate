@@ -28,7 +28,7 @@ public class MainActivityTest {
     public final TestRule chain = RuleChain.outerRule(component).around(main);
 
     @Test
-    public void showCustomers() throws Exception {
+    public void showMovies() throws Exception {
 
     }
 }

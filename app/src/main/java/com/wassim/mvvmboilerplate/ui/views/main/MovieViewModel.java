@@ -26,7 +26,7 @@ class MovieViewModel extends BaseViewModel<Movie> {
 
     @Override
     public Observable<Movie> getModel() {
-        return null;
+        return Observable.error(new RuntimeException("Not yet implemented method !"));
     }
 
     @Override
