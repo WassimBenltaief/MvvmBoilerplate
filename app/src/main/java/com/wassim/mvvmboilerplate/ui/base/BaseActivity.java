@@ -2,18 +2,15 @@ package com.wassim.mvvmboilerplate.ui.base;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
 import com.squareup.leakcanary.RefWatcher;
 import com.wassim.mvvmboilerplate.App;
 import com.wassim.mvvmboilerplate.injection.component.ActivityComponent;
 import com.wassim.mvvmboilerplate.injection.component.DaggerViewModelComponent;
 import com.wassim.mvvmboilerplate.injection.component.ViewModelComponent;
 import com.wassim.mvvmboilerplate.injection.module.ActivityModule;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -62,18 +59,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        bind();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unbind();
-    }
-
-    @Override
     protected void onDestroy() {
         if (!isChangingConfigurations()) {
             Timber.i("Clearing ViewModelComponent id=%d", mActivityId);
@@ -86,14 +71,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public ActivityComponent activityComponent() {
         return mActivityComponent;
-    }
-
-    public abstract void bind();
-
-    public void unbind(){
-        if(!isChangingConfigurations()){
-            compositeSubscription.clear();
-        }
     }
 
 }

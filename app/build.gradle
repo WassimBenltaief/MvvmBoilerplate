@@ -16,20 +16,29 @@ android {
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
     }
+
     buildTypes {
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
         debug {
             applicationIdSuffix '.debug'
             versionNameSuffix '-debug'
             testCoverageEnabled true
         }
+
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    dataBinding {
+        enabled = true
     }
 
     // needed because of https://github.com/robolectric/robolectric/issues/2230
@@ -40,10 +49,12 @@ android {
             }
         }
     }
+
     // needed because of this https://github.com/square/okio/issues/58
     lintOptions {
         disable 'InvalidPackage'
     }
+
 }
 
 jacocoAndroidUnitTestReport {
@@ -67,6 +78,7 @@ dependencies {
     final SUPPORT_LIBRARY_VERSION = '24.2.1'
     final RETROFIT_VERSION = '2.1.0'
     final OKHTTP_VERSION = '3.6.0'
+    final GLIDE_VERSION = '3.7.0'
     final STETHO_VERSION = '1.4.2'
     final LEAK_CANARY_VERSION = '1.6-SNAPSHOT'
     final DAGGER_VERSION = '2.5'
@@ -100,6 +112,7 @@ dependencies {
     compile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
 
     // some play services
+    //noinspection GradleDependency
     compile "com.google.android.gms:play-services-gcm:$PLAY_SERVICES_VERSION"
 
     // some database
@@ -113,6 +126,7 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
     compile "com.squareup.okhttp3:okhttp:$OKHTTP_VERSION"
     compile "com.squareup.okhttp3:logging-interceptor:$OKHTTP_VERSION"
+    compile "com.github.bumptech.glide:glide:$GLIDE_VERSION"
 
     // some threading
     compile 'io.reactivex:rxandroid:1.2.1'
