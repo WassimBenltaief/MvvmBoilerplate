@@ -4,7 +4,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
-import com.wassim.mvvmboilerplate.MovieModel;
 import com.wassim.mvvmboilerplate.data.model.Movie;
 
 import java.util.List;
@@ -48,7 +47,7 @@ public class DatabaseHelper {
         try {
             for (Movie movie : movies) {
                 long result = mDb.insert(
-                        MovieModel.TABLE_NAME,
+                        Movie.TABLE_NAME,
                         Movie.FACTORY.marshal(movie).asContentValues(),
                         SQLiteDatabase.CONFLICT_REPLACE);
             }

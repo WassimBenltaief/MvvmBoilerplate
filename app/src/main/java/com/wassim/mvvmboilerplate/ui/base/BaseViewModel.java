@@ -1,15 +1,22 @@
 package com.wassim.mvvmboilerplate.ui.base;
 
 
+import android.databinding.BaseObservable;
+
 import java.util.List;
 
-import rx.Observable;
+import rx.subscriptions.CompositeSubscription;
 
-public abstract class BaseViewModel<T extends MvvmModel> {
+public abstract class BaseViewModel<T extends MvvmModel> extends BaseObservable {
 
-    public abstract Observable<T> getModel();
+    protected CompositeSubscription compositeSubscription = new CompositeSubscription();
 
-    public abstract Observable<List<T>> getModels();
+    public abstract void unbind(boolean changingConfigurations);
 
+    public abstract void getModels();
+
+    public abstract void onModelsLoaded(List<T> models);
+
+    public abstract void handleError(Throwable throwable);
 }
 
