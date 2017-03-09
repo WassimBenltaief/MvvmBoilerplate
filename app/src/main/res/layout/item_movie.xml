@@ -5,17 +5,18 @@
 
         <variable
             name="viewModel"
-            type="com.wassim.mvvmboilerplate.ui.views.main.ItemMovieViewModel"/>
+            type="com.wassim.mvvmboilerplate.ui.views.main.ItemMovieViewModel" />
     </data>
 
 
     <LinearLayout
-        android:id="@+id/item_container"
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
-        android:padding="4dp"
-        android:orientation="horizontal">
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:padding="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,9 +26,9 @@
 
             <ImageView
                 android:id="@+id/movie_image"
-                tools:imageUrl="@{viewModel.url}"
                 android:layout_width="80dp"
-                android:layout_height="80dp" />
+                android:layout_height="80dp"
+                tools:imageUrl="@{viewModel.url}" />
         </LinearLayout>
 
         <LinearLayout
@@ -38,22 +39,21 @@
 
             <TextView
                 android:id="@+id/movie_title"
-                android:text="@{viewModel.title}"
-                android:layout_marginTop="10dp"
-                android:fontFamily="sans-serif-light"
                 style="@style/TextAppearance.AppCompat.Subhead"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@{viewModel.title}" />
 
             <TextView
                 android:id="@+id/movie_genre"
-                android:text="@{viewModel.genre}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="sans-serif-light"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:text="@{viewModel.genre}" />
         </LinearLayout>
     </LinearLayout>
-
 
 </layout>

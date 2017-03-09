@@ -7,10 +7,13 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Created by Wassim on 09/03/2017.
  */
+@RunWith(MockitoJUnitRunner.class)
 public class ItemMovieViewModelTest {
 
     private ItemMovieViewModel itemMovieViewModel;

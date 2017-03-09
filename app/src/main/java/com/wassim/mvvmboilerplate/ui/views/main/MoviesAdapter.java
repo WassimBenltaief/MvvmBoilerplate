@@ -3,11 +3,13 @@ package com.wassim.mvvmboilerplate.ui.views.main;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.wassim.mvvmboilerplate.R;
 import com.wassim.mvvmboilerplate.data.model.Movie;
 import com.wassim.mvvmboilerplate.databinding.ItemMovieBinding;
+import com.wassim.mvvmboilerplate.util.RecyclerViewClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +21,10 @@ import java.util.List;
 class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolder> {
 
     private List<Movie> movieList = new ArrayList<>();
+    private RecyclerViewClickListener mListener;
 
-    public MoviesAdapter() {
+    public MoviesAdapter(RecyclerViewClickListener listener) {
+        mListener = listener;
     }
 
     @Override
@@ -48,12 +52,13 @@ class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolder> {
         notifyDataSetChanged();
     }
 
-    static class MovieHolder extends RecyclerView.ViewHolder {
+    class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ItemMovieBinding mItemPeopleBinding;
 
         MovieHolder(ItemMovieBinding itemMovieBinding) {
-            super(itemMovieBinding.itemContainer);
+            super(itemMovieBinding.cardView);
             this.mItemPeopleBinding = itemMovieBinding;
+            this.mItemPeopleBinding.cardView.setOnClickListener(this);
         }
 
         void bindMovie(Movie movie) {
@@ -63,6 +68,11 @@ class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolder> {
             } else {
                 mItemPeopleBinding.getViewModel().setMovie(movie);
             }
+        }
+
+        @Override
+        public void onClick(View view) {
+            mListener.itemClicked(view, getLayoutPosition());
         }
     }
 

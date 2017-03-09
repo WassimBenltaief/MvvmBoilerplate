@@ -3,10 +3,13 @@ package com.wassim.mvvmboilerplate.ui.views.main;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.wassim.mvvmboilerplate.R;
+import com.wassim.mvvmboilerplate.data.model.Movie;
 import com.wassim.mvvmboilerplate.databinding.ActivityMainBinding;
 import com.wassim.mvvmboilerplate.ui.base.BaseActivity;
+import com.wassim.mvvmboilerplate.util.RecyclerViewClickListener;
 
 import javax.inject.Inject;
 
@@ -15,7 +18,7 @@ import rx.schedulers.Schedulers;
 
 import static com.wassim.mvvmboilerplate.util.Vars.LOADED;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements RecyclerViewClickListener {
 
     @Inject
     MovieViewModel viewModel;
@@ -32,7 +35,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initRecycler() {
-        mAdapter = new MoviesAdapter();
+        mAdapter = new MoviesAdapter(this);
         activityMainBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         activityMainBinding.recyclerView.setHasFixedSize(true);
         activityMainBinding.recyclerView.setNestedScrollingEnabled(true);
@@ -72,5 +75,12 @@ public class MainActivity extends BaseActivity {
     private void showMovies(Integer integer){
         if(integer == LOADED)
         mAdapter.setMovies(viewModel.movies);
+    }
+
+    @Override
+    public void itemClicked(View v, int position) {
+        Movie movie = viewModel.movies.get(position);
+        // todo open single movie activity
+
     }
 }
