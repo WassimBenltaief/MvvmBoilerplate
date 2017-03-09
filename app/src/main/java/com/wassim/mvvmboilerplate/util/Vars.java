@@ -8,4 +8,6 @@ public interface Vars {
 
     String MOVIE_OBJECT = "movie_object";
     String ENDPOINT = "http://wassim-beltaief.com/";
+    String PLACEHOLDER = "http://placehold.it/150x150";
+    int LOADED = 0;
 }
